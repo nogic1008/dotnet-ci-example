@@ -22,7 +22,7 @@ jobs:
     - name: Restore Tool
       run: dotnet tool restore
     - name: Lint
-      run: dotnet format --dry-run
+      run: dotnet format --check --dry-run
     - name: Build
       run: dotnet build -c Debug
     - name: Test
