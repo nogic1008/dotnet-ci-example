@@ -75,7 +75,7 @@ jobs:
         dotnet-version: 3.0.100
     - name: Build
       run: |
-        dotnet publish -c Release -r ${{ matrix.rid }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
+        dotnet publish ./Sample.Core/Sample.Core.csproj  -c Release -r ${{ matrix.rid }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
         zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
     - name: Get Release File Name & Upload URL
       id: get_release_info
