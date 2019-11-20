@@ -1,13 +1,9 @@
 # dotnet-ci-example
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/nogic1008/dotnet-ci-example)](https://github.com/nogic1008/dotnet-ci-example/releases)
+[![.NET Core CI](https://github.com/nogic1008/dotnet-ci-example/workflows/.NET%20Core%20CI%2FCD/badge.svg ".NET Core CI")](https://github.com/nogic1008/dotnet-ci-example/actions?query=workflow%3A%22.NET+Core+CI%2FCD%22)
+[![License](https://img.shields.io/github/license/nogic1008/dotnet-ci-example)](LICENSE)
 
 Example of .NET Core + Github Actions
-
-## Environment
-
-- Windows 10 Pro 1803 (x64)
-- .NET Core SDK 3.0.100
-- Visual Studion Code 1.40.1
-  - C# 1.21.7
 
 ## Setup
 
