@@ -11,7 +11,7 @@ jobs:
         dotnet-version: ['3.0.101', '3.1.100-preview3-014645']
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       NUGET_XMLDOC_MODE: skip
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
@@ -22,7 +22,6 @@ jobs:
         key: nuget-${{ runner.os }}-${{ matrix.dotnet-version }}
         restore-keys: |
           nuget-${{ runner.os }}-
-          nuget-
     - name: Setup .NET Core ${{ matrix.dotnet-version }}
       uses: actions/setup-dotnet@v1
       with:
@@ -35,43 +34,13 @@ jobs:
       run: dotnet build -c Debug
     - name: Test
       run: dotnet test -c Debug --no-build
-    
-  publish:
+
+  release:
+    name: Create Github Release
     if: contains(github.ref, 'tags/v')
-    needs: test
+    needs: [test]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rid: [win-x64, linux-x64, osx-x64]
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      NUGET_XMLDOC_MODE: skip
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/cache@v1
-      with:
-        path: ${{ github.workspace }}/.nuget/packages
-        key: nuget-${{ runner.os }}-3.0.101
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-    - name: Get Release File Name
-      id: get_release_info
-      run: |
-        echo ::set-output name=file_name::${REPOSITORY_NAME##*/}-${TAG_REF_NAME##*/v}
-        echo ::set-output name=version::${TAG_REF_NAME##*/v}
-      env:
-        TAG_REF_NAME: ${{ github.ref }}
-        REPOSITORY_NAME: ${{ github.repository }}
-    - name: Setup .NET Core 3.0 (current)
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.0.101
-    - name: Build
-      run: |
-        dotnet publish ./Sample.Core/Sample.Core.csproj  -c Release -r ${{ matrix.rid }} /p\:PublishSingleFile=true /p\:Version=${{ steps.get_release_info.outputs.version }} /p\:PublishTrimmed=${{ matrix.rid }} -o ./${{ matrix.rid }}
-        zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1.0.0
@@ -82,13 +51,63 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
+    - name: Output Release URL File
+      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
+    - name: Save Release URL File for publish
+      uses: actions/upload-artifact@v1
+      with:
+        name: release_url
+        path: release_url.txt
+    
+  publish:
+    if: contains(github.ref, 'tags/v')
+    needs: [test, release]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rid: [win-x64, linux-x64, osx-x64]
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      NUGET_XMLDOC_MODE: skip
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ${{ github.workspace }}/.nuget/packages
+        key: nuget-${{ runner.os }}-${{ matrix.dotnet-version }}
+        restore-keys: |
+          nuget-${{ runner.os }}-
+    - name: Restore File from release job
+      uses: actions/download-artifact@v1
+      with:
+        name: release_url
+    - name: Get Release File Name & Upload URL
+      id: get_release_info
+      run: |
+        echo ::set-output name=file_name::${REPOSITORY_NAME##*/}-${TAG_REF_NAME##*/v}
+        value=`cat release_url/release_url.txt`
+        echo ::set-output name=upload_url::$value
+        echo ::set-output name=version::${TAG_REF_NAME##*/v}
+      env:
+        TAG_REF_NAME: ${{ github.ref }}
+        REPOSITORY_NAME: ${{ github.repository }}
+    - name: Setup .NET Core 3.0 (current)
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.0.101
+    - name: Build
+      run: |
+        dotnet publish ./Sample.Core/Sample.Core.csproj  -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
+        zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ steps.get_release_info.outputs.upload_url }}
         asset_path: ./${{ matrix.rid }}.zip
         asset_name: ${{ steps.get_release_info.outputs.file_name }}-${{ matrix.rid }}.zip
         asset_content_type: application/zip
