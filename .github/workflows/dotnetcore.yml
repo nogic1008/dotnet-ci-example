@@ -15,6 +15,12 @@ jobs:
       NUGET_XMLDOC_MODE: skip
     steps:
     - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
     - name: Setup .NET Core ${{ matrix.dotnet-version }}
       uses: actions/setup-dotnet@v1
       with:
