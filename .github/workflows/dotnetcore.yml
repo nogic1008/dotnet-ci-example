@@ -58,7 +58,11 @@ jobs:
       - name: Build
         run: dotnet build -c Debug
       - name: Test
-        run: dotnet test -c Debug --no-build
+        run: dotnet test -c Debug --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   release:
     name: Create Github Release
