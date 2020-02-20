@@ -16,7 +16,7 @@ insert_final_newline = false
 indent_style = tab
 
 # Visual Studio XML Project Files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,runsettings}]
 indent_size = 2
 
 # XML Configuration Files
@@ -42,6 +42,7 @@ insert_final_newline = true
 
 # Batch Files
 [*.{cmd,bat}]
+end_of_line = crlf
 
 # Bash Files
 [*.sh]
