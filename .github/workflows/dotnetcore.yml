@@ -24,11 +24,11 @@ jobs:
         dotnet-version: [3.1]
         include:
           - dotnet-version: 2.1
-            dotnet-sdk-version: 2.1.803
+            dotnet-sdk-version: 2.1.804
           - dotnet-version: 3.0
-            dotnet-sdk-version: 3.0.102
+            dotnet-sdk-version: 3.0.103
           - dotnet-version: 3.1
-            dotnet-sdk-version: 3.1.101
+            dotnet-sdk-version: 3.1.102
           - os: ubuntu-latest
             dotnet-version: 3.1
             is-main: true
