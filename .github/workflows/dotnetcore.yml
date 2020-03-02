@@ -54,9 +54,9 @@ jobs:
         if: matrix.is-main
         run: dotnet format --check --dry-run
       - name: Build
-        run: dotnet build -c Debug -f netcoreapp${{ matrix.dotnet-version }}
+        run: dotnet build -c Debug
       - name: Test
-        run: dotnet test -c Debug -f netcoreapp${{ matrix.dotnet-version }} --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        run: dotnet test -c Debug --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
@@ -133,7 +133,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-sdk-version }}
       - name: Build
         run: |
-          dotnet publish ./Sample.Core/Sample.Core.csproj -f netcoreapp${{ matrix.dotnet-version }} -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
+          dotnet publish ./Sample.Core/Sample.Core.csproj -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
           zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
       - name: Upload Release Asset
         id: upload-release-asset
