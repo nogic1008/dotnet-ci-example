@@ -25,8 +25,6 @@ jobs:
         include:
           - dotnet-version: 2.1
             dotnet-sdk-version: 2.1.804
-          - dotnet-version: 3.0
-            dotnet-sdk-version: 3.0.103
           - dotnet-version: 3.1
             dotnet-sdk-version: 3.1.102
           - os: ubuntu-latest
@@ -99,11 +97,9 @@ jobs:
         dotnet-version: [3.1]
         include:
           - dotnet-version: 2.1
-            dotnet-sdk-version: 2.1.803
-          - dotnet-version: 3.0
-            dotnet-sdk-version: 3.0.102
+            dotnet-sdk-version: 2.1.804
           - dotnet-version: 3.1
-            dotnet-sdk-version: 3.1.101
+            dotnet-sdk-version: 3.1.102
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -114,9 +110,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ matrix.dotnet-version }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            nuget-${{ runner.os }}-
+            ${{ runner.os }}-nuget-
       - name: Restore File from release job
         uses: actions/download-artifact@v1
         with:
