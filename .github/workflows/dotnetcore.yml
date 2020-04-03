@@ -44,22 +44,16 @@ jobs:
 
   test:
     name: Debug Build & Test
-    needs: [lint]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet-version: ['3.1']
-        include:
-          - dotnet-version: '2.1'
-            dotnet-sdk-version: '2.1.804'
-          - dotnet-version: '3.1'
-            dotnet-sdk-version: '3.1.102'
-          - dotnet-version: '5.0-preview2'
-            dotnet-sdk-version: '5.0.100-preview.2.20176.6'
+        dotnet-version: ['2.1.804', '3.1.102', '5.0.100-preview.2.20176.6']
+        exclude:
+          - dotnet-version: '2.1.804'
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/cache@v1
         with:
           path: ${{ env.NUGET_PACKAGES }}
@@ -69,7 +63,7 @@ jobs:
       - name: Setup .NET Core ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-sdk-version }}
+          dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build
         run: dotnet build -c Debug
       - name: Test
