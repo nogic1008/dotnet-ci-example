@@ -1,4 +1,5 @@
 name: .NET Core CI/CD
+
 on:
   push:
     branches:
@@ -12,8 +13,35 @@ on:
     paths:
       - '**'
       - '!**.md'
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  NUGET_XMLDOC_MODE: skip
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  VERSION_CURRENT: '3.1'
+  VERSION_CURRENT_SDK: '3.1.102'
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Setup .NET Core ${{ env.VERSION_CURRENT }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.VERSION_CURRENT_SDK }}
+      - name: Restore Tool
+        run: dotnet tool restore
+      - name: Lint
+        run: dotnet format --check --dry-run
+
   test:
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
@@ -21,25 +49,19 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet-version: [3.1]
+        dotnet-version: ['3.1']
         include:
-          - dotnet-version: 2.1
-            dotnet-sdk-version: 2.1.804
-          - dotnet-version: 3.1
-            dotnet-sdk-version: 3.1.102
-          - os: ubuntu-latest
-            dotnet-version: 3.1
-            is-main: true
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      NUGET_XMLDOC_MODE: skip
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+          - dotnet-version: '2.1'
+            dotnet-sdk-version: '2.1.804'
+          - dotnet-version: '3.1'
+            dotnet-sdk-version: '3.1.102'
+          - dotnet-version: '5.0-preview2'
+            dotnet-sdk-version: '5.0.100-preview.2.20176.6'
     steps:
       - uses: actions/checkout@v1
       - uses: actions/cache@v1
         with:
-          path: ${{ github.workspace }}/.nuget/packages
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
@@ -47,12 +69,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ matrix.dotnet-sdk-version }}
-      - name: Restore Tool
-        if: matrix.is-main
-        run: dotnet tool restore
-      - name: Lint
-        if: matrix.is-main
-        run: dotnet format --check --dry-run
       - name: Build
         run: dotnet build -c Debug
       - name: Test
@@ -65,7 +81,7 @@ jobs:
   release:
     name: Create Github Release
     if: contains(github.ref, 'tags/v')
-    needs: [test]
+    needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
@@ -88,28 +104,25 @@ jobs:
 
   publish:
     if: contains(github.ref, 'tags/v')
-    needs: [test, release]
+    needs: [release]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         rid: [win-x64, linux-x64, osx-x64]
         # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet-version: [3.1]
+        dotnet-version: ['3.1']
         include:
-          - dotnet-version: 2.1
-            dotnet-sdk-version: 2.1.804
-          - dotnet-version: 3.1
-            dotnet-sdk-version: 3.1.102
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      NUGET_XMLDOC_MODE: skip
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+          - dotnet-version: '2.1'
+            dotnet-sdk-version: '2.1.804'
+          - dotnet-version: '3.1'
+            dotnet-sdk-version: '3.1.102'
+          - dotnet-version: '5.0-preview2'
+            dotnet-sdk-version: '5.0.100-preview.2.20176.6'
     steps:
       - uses: actions/checkout@v1
       - uses: actions/cache@v1
         with:
-          path: ${{ github.workspace }}/.nuget/packages
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
