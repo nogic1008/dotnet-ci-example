@@ -13,13 +13,6 @@ on:
     paths:
       - '**'
       - '!**.md'
-env:
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  NUGET_XMLDOC_MODE: skip
-  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-  VERSION_CURRENT: '3.1'
-  VERSION_CURRENT_SDK: '3.1.102'
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: "true"
