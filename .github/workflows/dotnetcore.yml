@@ -21,22 +21,22 @@ env:
   VERSION_CURRENT: '3.1'
   VERSION_CURRENT_SDK: '3.1.102'
 
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_NOLOGO: "true"
+  NUGET_XMLDOC_MODE: skip
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-      - name: Setup .NET Core ${{ env.VERSION_CURRENT }}
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.VERSION_CURRENT_SDK }}
+          dotnet-version: 3.1.201
       - name: Restore Tool
         run: dotnet tool restore
       - name: Lint
@@ -49,8 +49,8 @@ jobs:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        # ['2.1.804', '3.1.102', '5.0.100-preview.2.20176.6']
-        dotnet-version: ['3.1.102', '5.0.100-preview.2.20176.6']
+        # ['2.1.805', '3.1.201', '5.0.100-preview.2.20176.6']
+        dotnet-version: ['3.1.201', '5.0.100-preview.2.20176.6']
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -59,18 +59,18 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - name: Setup .NET Core ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build
-        run: dotnet build -c Debug
+        run: dotnet build
       - name: Test
-        run: dotnet test -c Debug --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.os }},${{ matrix.dotnet-version }}
 
   release:
     name: Create Github Release
@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1.0.0
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -104,16 +104,10 @@ jobs:
       matrix:
         rid: [win-x64, linux-x64, osx-x64]
         # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet-version: ['3.1']
-        include:
-          - dotnet-version: '2.1'
-            dotnet-sdk-version: '2.1.804'
-          - dotnet-version: '3.1'
-            dotnet-sdk-version: '3.1.102'
-          - dotnet-version: '5.0-preview2'
-            dotnet-sdk-version: '5.0.100-preview.2.20176.6'
+        # ['2.1.805', '3.1.201', '5.0.100-preview.2.20176.6']
+        dotnet-version: ['3.1.201']
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/cache@v1
         with:
           path: ${{ env.NUGET_PACKAGES }}
@@ -134,17 +128,17 @@ jobs:
         env:
           TAG_REF_NAME: ${{ github.ref }}
           REPOSITORY_NAME: ${{ github.repository }}
-      - name: Setup .NET Core ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-sdk-version }}
+          dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build
         run: |
-          dotnet publish ./Sample.Core/Sample.Core.csproj  -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
+          dotnet publish -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} -o ./${{ matrix.rid }}
           zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
       - name: Upload Release Asset
         id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
