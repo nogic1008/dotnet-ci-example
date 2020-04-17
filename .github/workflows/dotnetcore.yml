@@ -1,4 +1,5 @@
 name: .NET Core CI/CD
+
 on:
   push:
     branches:
@@ -12,6 +13,12 @@ on:
     paths:
       - '**'
       - '!**.md'
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_NOLOGO: "true"
+  NUGET_XMLDOC_MODE: skip
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
 jobs:
   test:
@@ -30,16 +37,11 @@ jobs:
           - os: ubuntu-latest
             dotnet-version: 3.1
             is-main: true
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      NUGET_XMLDOC_MODE: skip
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
         with:
-          path: ${{ github.workspace }}/.nuget/packages
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
@@ -54,9 +56,9 @@ jobs:
         if: matrix.is-main
         run: dotnet format --check --dry-run
       - name: Build
-        run: dotnet build -c Debug
+        run: dotnet build
       - name: Test
-        run: dotnet test -c Debug --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
@@ -100,16 +102,11 @@ jobs:
             dotnet-sdk-version: 2.1.805
           - dotnet-version: 3.1
             dotnet-sdk-version: 3.1.201
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      NUGET_XMLDOC_MODE: skip
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
         with:
-          path: ${{ github.workspace }}/.nuget/packages
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
