@@ -133,7 +133,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-sdk-version }}
       - name: Build
         run: |
-          dotnet publish ./Sample.Core/Sample.Core.csproj  -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} /p\:PublishSingleFile=true /p\:PublishTrimmed=true -o ./${{ matrix.rid }}
+          dotnet publish -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} -o ./${{ matrix.rid }}
           zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
       - name: Upload Release Asset
         id: upload-release-asset
