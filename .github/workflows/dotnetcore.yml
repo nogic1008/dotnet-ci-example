@@ -42,8 +42,11 @@ jobs:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        # ['2.1.805', '3.1.201', '5.0.100-preview.2.20176.6']
-        dotnet-version: ['3.1.201', '5.0.100-preview.2.20176.6']
+        dotnet: [
+          # { version: '2.1 (LTS)', sdk: '2.1.805', framework: 'netcore2.1' },
+          { version: '3.1 (LTS)', sdk: '3.1.201', framework: 'netcore3.1' },
+          { version: '5.0 (preview)', sdk: '5.0.100-preview.2.20176.6', framework: 'net5.0' }
+        ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -52,18 +55,18 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK ${{ matrix.dotnet.version }}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: ${{ matrix.dotnet.sdk }}
       - name: Build
-        run: dotnet build
+        run: dotnet build -f ${{ matrix.dotnet.framework }}
       - name: Test
-        run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        run: dotnet test --no-build -f ${{ matrix.dotnet.framework }} --collect:"XPlat Code Coverage" --settings coverlet.runsettings
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          flags: ${{ matrix.os }},${{ matrix.dotnet-version }}
+          flags: ${{ matrix.os }},${{ matrix.dotnet.framework }}
 
   release:
     name: Create Github Release
