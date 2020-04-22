@@ -7,18 +7,19 @@ on:
     tags:
       - v*
     paths:
-      - '**'
-      - '!**.md'
+      - "**"
+      - "!**.md"
   pull_request:
     paths:
-      - '**'
-      - '!**.md'
+      - "**"
+      - "!**.md"
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: "true"
   DOTNET_NOLOGO: "true"
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  STABLE_SDK_VERSION: 3.1.201
 
 jobs:
   lint:
@@ -26,10 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .NET Core 3.1
+      - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.201
+          dotnet-version: ${{ env.STABLE_SDK_VERSION }}
       - name: Restore Tool
         run: dotnet tool restore
       - name: Lint
@@ -40,13 +41,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
-        # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet: [
-          # { version: '2.1 (LTS)', sdk: '2.1.805', framework: 'netcore2.1' },
-          { version: '3.1 (LTS)', sdk: '3.1.201', framework: 'netcore3.1' },
-          { version: '5.0 (preview)', sdk: '5.0.100-preview.2.20176.6', framework: 'net5.0' }
-        ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # see also https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
+        dotnet:
+          [
+            # { version: "1.0", sdk: 1.1.14 }, # EOL
+            # { version: "1.1", sdk: 1.1.14 }, # EOL
+            # { version: "2.0", sdk: 2.1.202 }, # EOL
+            # { version: "2.1", sdk: 2.1.805 }, # LTS
+            # { version: "2.2", sdk: 2.2.207 }, # EOL
+            # { version: "3.0", sdk: 3.0.103 }, # EOL
+            { version: "3.1", sdk: 3.1.201 }, # LTS
+            # { version: "5.0", sdk: 5.0.100-preview.2.20176.6 }, # preview
+          ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -55,18 +62,22 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - name: Setup .NET Core SDK ${{ matrix.dotnet.version }}
+      - name: Setup .NET Core ${{ matrix.dotnet.version }} SDK
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ matrix.dotnet.sdk }}
+
+      - name: Restore
+        run: dotnet restore
       - name: Build
-        run: dotnet build -f ${{ matrix.dotnet.framework }}
+        run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --no-build -f ${{ matrix.dotnet.framework }} --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        run: dotnet test --no-build --settings coverlet.runsettings
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          flags: ${{ matrix.os }},${{ matrix.dotnet.framework }}
+          flags: ${{ matrix.os }},${{ matrix.dotnet.version }}
 
   release:
     name: Create Github Release
@@ -99,9 +110,18 @@ jobs:
     strategy:
       matrix:
         rid: [win-x64, linux-x64, osx-x64]
-        # see https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        # ['2.1.805', '3.1.201', '5.0.100-preview.2.20176.6']
-        dotnet-version: ['3.1.201']
+        # see also https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
+        dotnet:
+          [
+            # { version: "1.0", sdk: 1.1.14 }, # EOL
+            # { version: "1.1", sdk: 1.1.14 }, # EOL
+            # { version: "2.0", sdk: 2.1.202 }, # EOL
+            # { version: "2.1", sdk: 2.1.805 }, # LTS
+            # { version: "2.2", sdk: 2.2.207 }, # EOL
+            # { version: "3.0", sdk: 3.0.103 }, # EOL
+            { version: "3.1", sdk: 3.1.201 }, # LTS
+            # { version: "5.0", sdk: 5.0.100-preview.2.20176.6 }, # preview
+          ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -115,7 +135,7 @@ jobs:
         with:
           name: release_url
       - name: Get Release File Name & Upload URL
-        id: get_release_info
+        id: release_info
         run: |
           echo ::set-output name=file_name::${REPOSITORY_NAME##*/}-${TAG_REF_NAME##*/v}
           value=`cat release_url/release_url.txt`
@@ -124,13 +144,13 @@ jobs:
         env:
           TAG_REF_NAME: ${{ github.ref }}
           REPOSITORY_NAME: ${{ github.repository }}
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core ${{ matrix.dotnet.version }} SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: ${{ matrix.dotnet.sdk }}
       - name: Build
         run: |
-          dotnet publish -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.get_release_info.outputs.version }} -o ./${{ matrix.rid }}
+          dotnet publish -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.release_info.outputs.version }} -o ./${{ matrix.rid }}
           zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
       - name: Upload Release Asset
         id: upload-release-asset
@@ -138,7 +158,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.get_release_info.outputs.upload_url }}
+          upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./${{ matrix.rid }}.zip
-          asset_name: ${{ steps.get_release_info.outputs.file_name }}-${{ matrix.rid }}-core${{ matrix.dotnet-version }}.zip
+          asset_name: ${{ steps.release_info.outputs.file_name }}-${{ matrix.rid }}-core${{ matrix.dotnet.version }}.zip
           asset_content_type: application/zip
