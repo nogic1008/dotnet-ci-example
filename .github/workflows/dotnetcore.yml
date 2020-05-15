@@ -33,6 +33,8 @@ jobs:
           dotnet-version: ${{ env.STABLE_SDK_VERSION }}
       - name: Restore Tool
         run: dotnet tool restore
+      - name: Add Problem Matcher for dotnet-format
+        uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Lint
         run: dotnet format --check --dry-run
 
