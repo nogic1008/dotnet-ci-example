@@ -47,14 +47,14 @@ jobs:
         # see also https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
         dotnet:
           [
-            # { version: "1.0", sdk: 1.1.14 }, # EOL
-            # { version: "1.1", sdk: 1.1.14 }, # EOL
-            # { version: "2.0", sdk: 2.1.202 }, # EOL
-            # { version: "2.1", sdk: 2.1.806 }, # LTS
-            # { version: "2.2", sdk: 2.2.207 }, # EOL
-            # { version: "3.0", sdk: 3.0.103 }, # EOL
-            { version: "3.1", sdk: 3.1.202 }, # LTS
-            # { version: "5.0", sdk: 5.0.100-preview.3.20216.6 }, # preview
+            # { version: "1.0", sdk: 1.1.14, moniker: "netcore10" }, # EOL
+            # { version: "1.1", sdk: 1.1.14, moniker: "netcore11" }, # EOL
+            # { version: "2.0", sdk: 2.1.202, moniker: "netcore20" }, # EOL
+            # { version: "2.1", sdk: 2.1.806, moniker: "netcore21" }, # LTS
+            # { version: "2.2", sdk: 2.2.207, moniker: "netcore22" }, # EOL
+            # { version: "3.0", sdk: 3.0.103, moniker: "netcore30" }, # EOL
+            { version: "3.1", sdk: 3.1.202, moniker: "netcore31" }, # LTS
+            # { version: "5.0", sdk: 5.0.100-preview.3.20216.6, moniker: "net5" }, # preview
           ]
     steps:
       - uses: actions/checkout@v2
@@ -79,7 +79,8 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          flags: ${{ matrix.os }},${{ matrix.dotnet.version }}
+          file: "!**/.nuget/packages/**/*.*"
+          flags: ${{ runner.os }},${{ matrix.dotnet.moniker }}
 
   release:
     name: Create Github Release
