@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: '/'
+  schedule:
+    interval: daily
+    time: '08:00'
+    timezone: Japan
+  labels:
+  - 'dependabot:robot:'
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
