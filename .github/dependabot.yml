@@ -1,0 +1,17 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    time: '12:00'
+    timezone: Japan
+  open-pull-requests-limit: 10
+  reviewers:
+  - nogic1008
+  labels:
+  - 'dependabot:robot:'
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
