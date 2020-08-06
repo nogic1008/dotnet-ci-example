@@ -15,11 +15,10 @@ on:
       - "!**.md"
 
 env:
-  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
-  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-  STABLE_SDK_VERSION: 3.1.202
 
 jobs:
   lint:
@@ -28,9 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.5.0
         with:
-          dotnet-version: ${{ env.STABLE_SDK_VERSION }}
+          dotnet-version: 3.1
       - name: Restore Tool
         run: dotnet tool restore
       - name: Add Problem Matcher for dotnet-format
@@ -44,18 +43,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        # see also https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet:
-          [
-            # { version: "1.0", sdk: 1.1.14, moniker: "netcore10" }, # EOL
-            # { version: "1.1", sdk: 1.1.14, moniker: "netcore11" }, # EOL
-            # { version: "2.0", sdk: 2.1.202, moniker: "netcore20" }, # EOL
-            # { version: "2.1", sdk: 2.1.806, moniker: "netcore21" }, # LTS
-            # { version: "2.2", sdk: 2.2.207, moniker: "netcore22" }, # EOL
-            # { version: "3.0", sdk: 3.0.103, moniker: "netcore30" }, # EOL
-            { version: "3.1", sdk: 3.1.202, moniker: "netcore31" }, # LTS
-            # { version: "5.0", sdk: 5.0.100-preview.3.20216.6, moniker: "net5" }, # preview
-          ]
+        # see also https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json
+        dotnet: ["3.1"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -64,10 +53,10 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - name: Setup .NET Core ${{ matrix.dotnet.version }} SDK
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET Core ${{ matrix.dotnet }} SDK
+        uses: actions/setup-dotnet@v1.5.0
         with:
-          dotnet-version: ${{ matrix.dotnet.sdk }}
+          dotnet-version: ${{ matrix.dotnet }}
 
       - name: Restore
         run: dotnet restore
@@ -80,7 +69,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           file: "!**/.nuget/packages/**/*.*"
-          flags: ${{ runner.os }},${{ matrix.dotnet.moniker }}
+          flags: ${{ runner.os }},netcore${{ matrix.dotnet }}
 
   release:
     name: Create Github Release
@@ -113,18 +102,8 @@ jobs:
     strategy:
       matrix:
         rid: [win-x64, linux-x64, osx-x64]
-        # see also https://github.com/dotnet/core/blob/master/release-notes/releases-index.json
-        dotnet:
-          [
-            # { version: "1.0", sdk: 1.1.14 }, # EOL
-            # { version: "1.1", sdk: 1.1.14 }, # EOL
-            # { version: "2.0", sdk: 2.1.202 }, # EOL
-            # { version: "2.1", sdk: 2.1.806 }, # LTS
-            # { version: "2.2", sdk: 2.2.207 }, # EOL
-            # { version: "3.0", sdk: 3.0.103 }, # EOL
-            { version: "3.1", sdk: 3.1.202 }, # LTS
-            # { version: "5.0", sdk: 5.0.100-preview.3.20216.6 }, # preview
-          ]
+        # see also https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json
+        dotnet: ["3.1"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -147,10 +126,10 @@ jobs:
         env:
           TAG_REF_NAME: ${{ github.ref }}
           REPOSITORY_NAME: ${{ github.repository }}
-      - name: Setup .NET Core ${{ matrix.dotnet.version }} SDK
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET Core ${{ matrix.dotnet }} SDK
+        uses: actions/setup-dotnet@v1.5.0
         with:
-          dotnet-version: ${{ matrix.dotnet.sdk }}
+          dotnet-version: ${{ matrix.dotnet }}
       - name: Build
         run: |
           dotnet publish -c Release -r ${{ matrix.rid }} /p\:Version=${{ steps.release_info.outputs.version }} -o ./${{ matrix.rid }}
@@ -163,5 +142,5 @@ jobs:
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./${{ matrix.rid }}.zip
-          asset_name: ${{ steps.release_info.outputs.file_name }}-${{ matrix.rid }}-core${{ matrix.dotnet.version }}.zip
+          asset_name: ${{ steps.release_info.outputs.file_name }}-${{ matrix.rid }}-core${{ matrix.dotnet }}.zip
           asset_content_type: application/zip
