@@ -47,7 +47,7 @@ jobs:
         dotnet: ["3.1"]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2.1.0
+      - uses: actions/cache@v2.1.1
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
@@ -106,7 +106,7 @@ jobs:
         dotnet: ["3.1"]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2.1.0
+      - uses: actions/cache@v2.1.1
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
