@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Sample.Core
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main()
             => Console.WriteLine(
