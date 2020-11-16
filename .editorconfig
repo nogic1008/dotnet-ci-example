@@ -2,10 +2,11 @@ root = true
 
 [*]
 indent_style = space
-indent_size = 4
+indent_size = 2
 charset = utf-8
 trim_trailing_whitespace = false
-insert_final_newline = false
+insert_final_newline = true
+end_of_line = lf
 
 #########################
 # File Extension Settings
@@ -15,38 +16,16 @@ insert_final_newline = false
 [*.sln]
 indent_style = tab
 
-# Visual Studio XML Project Files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,runsettings}]
-indent_size = 2
-
-# XML Configuration Files
-[*.{xml,config,props,targets,nuspec,resx,ruleset,vsixmanifest,vsct}]
-indent_size = 2
-
-# JSON Files
-[*.{json,json5}]
-indent_size = 2
-
-# YAML Files
-[*.{yml,yaml}]
-indent_size = 2
-
 # Markdown Files
 [*.md]
 trim_trailing_whitespace = false
-
-# Web Files
-[*.{htm,html,js,ts,tsx,css,sass,scss,less,svg,vue}]
-indent_size = 2
-insert_final_newline = true
 
 # Batch Files
 [*.{cmd,bat}]
 end_of_line = crlf
 
-# Bash Files
-[*.sh]
-end_of_line = lf
+[*.{cs,csx,cake,vb}]
+indent_size = 4
 
 ###########################
 # .NET Language Conventions
