@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <RestoreLockedMode>true</RestoreLockedMode>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>

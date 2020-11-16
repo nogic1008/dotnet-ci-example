@@ -1,13 +1,7 @@
 using System;
 using System.Linq;
+using Sample.Core;
 
-namespace Sample.Core
-{
-    internal static class Program
-    {
-        private static void Main()
-            => Console.WriteLine(
-                string.Join(", ", Enumerable.Range(1, 20).Select(i => i.ToFizzBuzzFormat()))
-            );
-    }
-}
+Console.WriteLine(
+    string.Join(", ", Enumerable.Range(1, 20).Select(i => i.ToFizzBuzzFormat()))
+);
