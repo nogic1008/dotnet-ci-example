@@ -63,7 +63,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet.sdk }}
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore --locked-mode
       - name: Build
         run: dotnet build --no-restore -f ${{ matrix.dotnet.framework }}
       - name: Test
@@ -137,7 +137,8 @@ jobs:
           dotnet-version: ${{ matrix.dotnet.sdk }}
       - name: Build
         run: |
-          dotnet publish -c Release -f ${{ matrix.dotnet.framework }} -r ${{ matrix.rid }} /p\:Version=${{ steps.release_info.outputs.version }} -o ./${{ matrix.rid }}
+          dotnet restore --locked-mode
+          dotnet publish --no-restore -c Release -f ${{ matrix.dotnet.framework }} -r ${{ matrix.rid }} /p\:Version=${{ steps.release_info.outputs.version }} -o ./${{ matrix.rid }}
           zip -r ${{ matrix.rid }} ./${{ matrix.rid }}
       - name: Upload Release Asset
         id: upload-release-asset
