@@ -118,7 +118,7 @@ jobs:
             ${{ runner.os }}-nuget-${{ matrix.dotnet.sdk }}-
             ${{ runner.os }}-nuget-
       - name: Restore File from release job
-        uses: actions/download-artifact@v2.0.7
+        uses: actions/download-artifact@v2.0.8
         with:
           name: release_url
       - name: Get Release File Name & Upload URL
