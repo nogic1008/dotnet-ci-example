@@ -35,7 +35,7 @@ jobs:
       - name: Add Problem Matcher for dotnet-format
         uses: xt0rted/dotnet-format-problem-matcher@v1
       - name: Lint
-        run: dotnet format --check --dry-run
+        run: dotnet format --check
 
   test:
     name: Debug Build & Test
