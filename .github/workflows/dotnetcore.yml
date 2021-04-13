@@ -45,7 +45,7 @@ jobs:
       - name: Remove NuGet config (Windows only) # workaround for https://github.com/actions/virtual-environments/issues/3038
         if: runner.os == 'Windows'
         run: Remove-Item $env:APPDATA\NuGet\NuGet.Config
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
