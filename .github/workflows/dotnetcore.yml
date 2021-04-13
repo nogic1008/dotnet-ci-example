@@ -15,7 +15,6 @@ env:
   DOTNET_NOLOGO: true
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES_PATH: ${{ github.workspace }}/.nuget/packages
-  NUGET_PACKAGES: ${{ env.NUGET_PACKAGES_PATH }}
 
 jobs:
   lint:
@@ -41,6 +40,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+    env:
+      NUGET_PACKAGES: ${{ env.NUGET_PACKAGES_PATH }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2.1.4
