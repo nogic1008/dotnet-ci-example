@@ -43,10 +43,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set NuGet Cache Folder (Linux/MacOS)
-        if: runner.os != "Windows"
+        if: runner.os != 'Windows'
         run: echo "NUGET_PACKAGES=$NUGET_PACKAGES_PATH" >> $GITHUB_ENV
       - name: Set NuGet Cache Folder (Windows)
-        if: runner.os == "Windows"
+        if: runner.os == 'Windows'
         run: echo "NUGET_PACKAGES=$env:NUGET_PACKAGES_PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - uses: actions/cache@v2.1.4
         with:
