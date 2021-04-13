@@ -1,7 +1,16 @@
 <Project>
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <!-- Meta Options -->
+    <Authors>Nogic</Authors>
+    <Copyright>©2019-2021 Nogic</Copyright>
+    <PackageProjectUrl>https://github.com/nogic1008/dotnet-ci-example</PackageProjectUrl>
+    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Build Options -->
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 </Project>
