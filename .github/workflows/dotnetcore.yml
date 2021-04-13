@@ -14,7 +14,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
   NUGET_XMLDOC_MODE: skip
-  NUGET_PACKAGES_PATH: ${{ github.workspace }}/.nuget/packages
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
 jobs:
   lint:
@@ -42,18 +42,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
-      - name: Set NuGet Cache Folder (Linux/MacOS)
-        if: runner.os != 'Windows'
-        run: echo "NUGET_PACKAGES=$NUGET_PACKAGES_PATH" >> $GITHUB_ENV
-      - name: Set NuGet Cache Folder (Windows)
+      - name: Remove NuGet config (Windows only) # workaround for https://github.com/actions/virtual-environments/issues/3038
         if: runner.os == 'Windows'
-        run: |
-          $str = $env:NUGET_PACKAGES_PATH
-          $str = $str.Replace("/", "\")
-          echo "NUGET_PACKAGES=$str" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        run: Remove-Item $env:APPDATA\NuGet\NuGet.Config
       - uses: actions/cache@v2.1.4
         with:
-          path: ${{ env.NUGET_PACKAGES_PATH }}
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
