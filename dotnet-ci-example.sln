@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Core", "src\Sample.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Test", "test\Sample.Test\Sample.Test.csproj", "{FEC2DFCE-BE21-42F8-BB62-9A3CEBB61DA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Cli", "src\Sample.Cli\Sample.Cli.csproj", "{D40DAACB-4B44-4FF8-87AA-138AB6AE9212}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{FEC2DFCE-BE21-42F8-BB62-9A3CEBB61DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC2DFCE-BE21-42F8-BB62-9A3CEBB61DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC2DFCE-BE21-42F8-BB62-9A3CEBB61DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D40DAACB-4B44-4FF8-87AA-138AB6AE9212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40DAACB-4B44-4FF8-87AA-138AB6AE9212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D40DAACB-4B44-4FF8-87AA-138AB6AE9212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D40DAACB-4B44-4FF8-87AA-138AB6AE9212}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
