@@ -61,7 +61,6 @@ jobs:
         run: dotnet test --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.5.2
+        uses: codecov/codecov-action@v2.0.2
         with:
-          file: "!**/.nuget/packages/**/*.*"
           flags: ${{ runner.os }}
