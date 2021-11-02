@@ -21,7 +21,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - name: Setup .NET SDK # detected from global.json
         uses: actions/setup-dotnet@v1.8.2
       - name: Restore Tool
@@ -39,7 +39,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - uses: actions/cache@v2.1.6
         with:
           path: ${{ env.NUGET_PACKAGES }}
