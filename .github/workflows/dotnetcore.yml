@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.4.0
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v1.9.1
+        uses: actions/setup-dotnet@v2.0.0
       - name: Restore Tool
         run: dotnet tool restore
       - name: Add Problem Matcher for dotnet-format
@@ -47,7 +47,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v1.9.1
+        uses: actions/setup-dotnet@v2.0.0
 
       - name: Restore
         run: dotnet restore --force-evaluate
@@ -86,7 +86,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v1.9.1
+        uses: actions/setup-dotnet@v2.0.0
 
       - name: Restore
         run: dotnet restore --locked-mode
