@@ -85,7 +85,7 @@ jobs:
   publish-nuget:
     name: Publish to NuGet
     needs: [build]
-    if: ${{ secrets.NUGET_API_KEY }}
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK # detected from global.json

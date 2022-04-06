@@ -55,9 +55,7 @@ jobs:
       - name: Restore
         run: dotnet restore --force-evaluate
       - name: Run ECLint
-        run: |
-          npm install -g eclint
-          eclint fix "**/packages.lock.json"
+        run: npx eclint fix "**/packages.lock.json"
       - name: Diff
         id: diff
         continue-on-error: true
@@ -104,4 +102,5 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.0.0
         with:
-          flags: ${{ runner.os }}
+          flags: ${{ runner.os }},${{ matrix.framework }}
+          files: "*.opencover.xml"
