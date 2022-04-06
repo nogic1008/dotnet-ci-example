@@ -221,7 +221,7 @@ csharp_style_conditional_delegate_call = true:warning
 
 # Add braces (IDE0011)
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0011
-csharp_prefer_braces = true:warning
+csharp_prefer_braces = when_multiline:warning
 
 # Use simple 'using' statement (IDE0063)
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0063
@@ -300,7 +300,7 @@ csharp_new_line_between_query_expression_clauses = true
 # https://docs.microsoft.com/visualstudio/ide/editorconfig-code-style-settings-reference#indent
 csharp_indent_case_contents = true
 csharp_indent_switch_labels = true
-csharp_indent_labels = no_change
+csharp_indent_labels = one_less_than_current
 csharp_indent_block_contents = true
 csharp_indent_braces = false
 csharp_indent_case_contents_when_block = false
@@ -309,7 +309,7 @@ csharp_indent_case_contents_when_block = false
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/formatting-rules#spacing-options
 csharp_space_after_cast = false
 csharp_space_after_keywords_in_control_flow_statements = true
-csharp_space_between_parentheses = expressions
+csharp_space_between_parentheses = none
 csharp_space_before_colon_in_inheritance_clause = true
 csharp_space_after_colon_in_inheritance_clause = true
 csharp_space_around_binary_operators = before_and_after
@@ -325,7 +325,7 @@ csharp_space_after_dot = false
 csharp_space_before_dot = false
 csharp_space_after_semicolon_in_for_statement = true
 csharp_space_before_semicolon_in_for_statement = false
-csharp_space_around_declaration_statements = do_not_ignore
+csharp_space_around_declaration_statements = false
 csharp_space_before_open_square_brackets = false
 csharp_space_between_empty_square_brackets = false
 csharp_space_between_square_brackets = false
