@@ -80,6 +80,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        framework: [net6.0, netcoreapp3.1]
     steps:
       - uses: actions/checkout@v3.0.0
       - uses: actions/cache@v3.0.1
@@ -98,7 +99,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --no-build --settings coverlet.runsettings
+        run: dotnet test --framework ${{ matrix.framework }} --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.0.0
