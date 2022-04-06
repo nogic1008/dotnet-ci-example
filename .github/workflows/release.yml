@@ -60,3 +60,24 @@ jobs:
         with:
           tag_name: ${{ github.event.release.tag_name }}
           files: nupkgs/*.nupkg
+
+  publish-gpr:
+    name: Publish to GitHub Packages
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET SDK # detected from global.json
+        uses: actions/setup-dotnet@v2.0.0
+        with:
+          source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download Build Assets
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: packages
+          path: nupkgs/
+
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push "nupkgs/*.nupkg" --skip-duplicate
