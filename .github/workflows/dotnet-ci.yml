@@ -15,6 +15,9 @@ env:
   DOTNET_NOLOGO: true
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  DOTNET_VERSION: |
+    3.1.x
+    6.x
 
 jobs:
   lint:
@@ -44,8 +47,10 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - name: Setup .NET SDK # detected from global.json
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v2.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore
         run: dotnet restore --force-evaluate
@@ -75,6 +80,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        framework: [net6.0, netcoreapp3.1]
     steps:
       - uses: actions/checkout@v3.0.0
       - uses: actions/cache@v3.0.1
@@ -83,15 +89,17 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - name: Setup .NET SDK # detected from global.json
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v2.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore
         run: dotnet restore --locked-mode
       - name: Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --no-build --settings coverlet.runsettings
+        run: dotnet test --framework ${{ matrix.framework }} --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.0.0
