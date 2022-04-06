@@ -11,7 +11,7 @@ Example of .NET Core + Github Actions
 ## Setup
 
 ```console
-> dotnet tool restore
+> dotnet restore
 ```
 
 ## Commands
