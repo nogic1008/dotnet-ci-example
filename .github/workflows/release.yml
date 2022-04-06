@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  NUGET_XMLDOC_MODE: skip
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  DOTNET_VERSION: |
+    3.1.x
+    6.x
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.0
+      - uses: actions/cache@v3.0.1
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore --locked-mode
+      - name: Release Build & Pack
+        run: dotnet pack --configuration Release --no-restore --output nupkgs -p:Version=${TAG_VERSION:1}
+        env:
+          TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
+
+      - name: Upload Build Assets
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: packages
+          path: nupkgs/
+
+  upload:
+    name: Upload to GitHub Releases
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Assets
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: packages
+          path: nupkgs/
+
+      - name: Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: nupkgs/*.nupkg
