@@ -24,7 +24,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.2.0
       - name: Setup .NET SDK # detected from global.json
         uses: actions/setup-dotnet@v3.0.3
       - name: Add Problem Matcher for dotnet-format
@@ -36,7 +36,7 @@ jobs:
     name: Validate NuGet Lock Files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.2.0
       - uses: actions/cache@v3.0.11
         with:
           path: ${{ env.NUGET_PACKAGES }}
@@ -57,7 +57,7 @@ jobs:
     if: failure() && contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.2.0
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -97,7 +97,7 @@ jobs:
           - os: windows-latest
             framework: net48
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.2.0
       - uses: actions/cache@v3.0.11
         with:
           path: ${{ env.NUGET_PACKAGES }}
