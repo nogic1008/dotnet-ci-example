@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.3.0
-      - uses: actions/cache@v3.2.3
+      - uses: actions/cache@v3.2.4
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
@@ -61,7 +61,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - uses: actions/cache@v3.2.3
+      - uses: actions/cache@v3.2.4
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
@@ -98,7 +98,7 @@ jobs:
             framework: net48
     steps:
       - uses: actions/checkout@v3.3.0
-      - uses: actions/cache@v3.2.3
+      - uses: actions/cache@v3.2.4
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
