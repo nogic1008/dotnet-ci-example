@@ -6,7 +6,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/nogic1008/dotnet-ci-example/badge)](https://www.codefactor.io/repository/github/nogic1008/dotnet-ci-example)
 [![License](https://img.shields.io/github/license/nogic1008/dotnet-ci-example)](LICENSE)
 
-Example of .NET Core + Github Actions
+Example of .NET + Github Actions
 
 ## Setup
 
