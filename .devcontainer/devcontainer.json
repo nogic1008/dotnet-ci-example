@@ -7,5 +7,10 @@
     }
   },
   "postCreateCommand": "dotnet restore",
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": "mono-complete"
+    }
+  }
 }
