@@ -36,16 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.2
-      - uses: actions/cache@v3.3.1
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Restore with lock files
         run: dotnet restore --locked-mode
@@ -60,16 +56,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - uses: actions/cache@v3.3.1
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Restore and Update Lock Files
         run: dotnet restore --force-evaluate
@@ -97,16 +89,12 @@ jobs:
             framework: net48
     steps:
       - uses: actions/checkout@v3.5.2
-      - uses: actions/cache@v3.3.1
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Restore
         run: dotnet restore
