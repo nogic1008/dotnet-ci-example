@@ -19,16 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.2
-      - uses: actions/cache@v3.3.1
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3.0.3
+        uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Restore
         run: dotnet restore --locked-mode
@@ -66,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v3.0.3
+        uses: actions/setup-dotnet@v3.2.0
 
       - name: Download Build Assets
         uses: actions/download-artifact@v3.0.2
@@ -86,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v3.0.3
+        uses: actions/setup-dotnet@v3.2.0
 
       - name: Download Build Assets
         uses: actions/download-artifact@v3.0.2
