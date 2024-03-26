@@ -104,7 +104,7 @@ jobs:
         run: dotnet test --framework ${{ matrix.framework }} --no-build --settings coverlet.runsettings
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3.1.4
+        uses: codecov/codecov-action@v4.1.1
         with:
           flags: ${{ runner.os }},${{ matrix.framework }}
           files: "*.opencover.xml"
