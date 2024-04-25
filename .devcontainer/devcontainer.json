@@ -1,14 +1,17 @@
 {
-  "name": ".NET 6.0",
-  "image": "mcr.microsoft.com/vscode/devcontainers/dotnet:0-6.0-bullseye",
+  "name": ".NET 8.0 + 6.0 with Mono",
+  "image": "mcr.microsoft.com/vscode/devcontainers/dotnet:0-8.0",
   "customizations": {
     "vscode": {
-      "extensions": ["ms-dotnettools.csharp", "EditorConfig.EditorConfig"]
+      "extensions": ["EditorConfig.EditorConfig"]
     }
   },
   "postCreateCommand": "dotnet restore",
   "remoteUser": "vscode",
   "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "6.0"
+    },
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "mono-complete"
     }
