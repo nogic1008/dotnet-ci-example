@@ -15,8 +15,6 @@ env:
   DOTNET_NOLOGO: true
   NUGET_XMLDOC_MODE: skip
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-  DOTNET_VERSION: |
-    6.x
 
 jobs:
   lint:
