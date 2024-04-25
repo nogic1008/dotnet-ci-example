@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- Meta Options -->
     <Authors>Nogic</Authors>
-    <Copyright>©2019-2023 Nogic</Copyright>
+    <Copyright>©2019-2024 Nogic</Copyright>
     <PackageProjectUrl>https://github.com/nogic1008/dotnet-ci-example</PackageProjectUrl>
     <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
