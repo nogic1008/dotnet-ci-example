@@ -344,7 +344,7 @@ dotnet_style_qualification_for_event = true:warning
 ## `var` preferences ##
 # 'var' preferences (IDE0007, IDE0008)
 # https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0007-ide0008
-csharp_style_var_for_built_in_types = true:warning
+csharp_style_var_for_built_in_types = false:warning
 csharp_style_var_when_type_is_apparent = true:warning
 csharp_style_var_elsewhere = true:warning
 ## End `var` preferences ##
