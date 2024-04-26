@@ -288,26 +288,6 @@
         "type": "Project"
       }
     },
-    ".NETFramework,Version=v4.8/win7-x86": {
-      "Microsoft.Testing.Extensions.CodeCoverage": {
-        "type": "Direct",
-        "requested": "[17.10.4, )",
-        "resolved": "17.10.4",
-        "contentHash": "kICNZzPq+Obv5Qohu2frOdBcoOupgAiRV/ZYznubjT2FgjzI/RySQ5N9NPL1LYCH+pTPomLlJmRJb85hc9aJnA==",
-        "dependencies": {
-          "Microsoft.DiaSymReader": "2.0.0",
-          "Microsoft.Extensions.DependencyModel": "6.0.0",
-          "Microsoft.Testing.Platform": "1.0.1",
-          "Mono.Cecil": "0.11.5",
-          "System.Reflection.Metadata": "6.0.1"
-        }
-      },
-      "System.Runtime.InteropServices.RuntimeInformation": {
-        "type": "Transitive",
-        "resolved": "4.3.0",
-        "contentHash": "cbz4YJMqRDR7oLeMRbdYv7mYzc++17lNhScCX0goO2XpGWdvAt60CGN+FHdePUEHCe/Jy9jUlvNAiNdM+7jsOw=="
-      }
-    },
     "net6.0": {
       "FluentAssertions": {
         "type": "Direct",
@@ -547,34 +527,6 @@
         "type": "Project"
       }
     },
-    "net6.0/win7-x86": {
-      "Microsoft.Testing.Extensions.CodeCoverage": {
-        "type": "Direct",
-        "requested": "[17.10.4, )",
-        "resolved": "17.10.4",
-        "contentHash": "kICNZzPq+Obv5Qohu2frOdBcoOupgAiRV/ZYznubjT2FgjzI/RySQ5N9NPL1LYCH+pTPomLlJmRJb85hc9aJnA==",
-        "dependencies": {
-          "Microsoft.DiaSymReader": "2.0.0",
-          "Microsoft.Extensions.DependencyModel": "6.0.0",
-          "Microsoft.Testing.Platform": "1.0.1",
-          "Mono.Cecil": "0.11.5",
-          "System.Reflection.Metadata": "6.0.1"
-        }
-      },
-      "System.Security.Cryptography.ProtectedData": {
-        "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "cJV7ScGW7EhatRsjehfvvYVBvtiSMKgN8bOVI0bQhnF5bU7vnHVIsH49Kva7i7GWaWYvmEzkYVk1TC+gZYBEog=="
-      },
-      "System.Text.Encodings.Web": {
-        "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "Vg8eB5Tawm1IFqj4TVK1czJX89rhFxJo9ELqc/Eiq0eXy13RK00eubyU6TJE6y+GQXjyV5gSfiewDUZjQgSE0w==",
-        "dependencies": {
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        }
-      }
-    },
     "net8.0": {
       "FluentAssertions": {
         "type": "Direct",
@@ -812,34 +764,6 @@
       },
       "sample.core": {
         "type": "Project"
-      }
-    },
-    "net8.0/win7-x86": {
-      "Microsoft.Testing.Extensions.CodeCoverage": {
-        "type": "Direct",
-        "requested": "[17.10.4, )",
-        "resolved": "17.10.4",
-        "contentHash": "kICNZzPq+Obv5Qohu2frOdBcoOupgAiRV/ZYznubjT2FgjzI/RySQ5N9NPL1LYCH+pTPomLlJmRJb85hc9aJnA==",
-        "dependencies": {
-          "Microsoft.DiaSymReader": "2.0.0",
-          "Microsoft.Extensions.DependencyModel": "6.0.0",
-          "Microsoft.Testing.Platform": "1.0.1",
-          "Mono.Cecil": "0.11.5",
-          "System.Reflection.Metadata": "6.0.1"
-        }
-      },
-      "System.Security.Cryptography.ProtectedData": {
-        "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "cJV7ScGW7EhatRsjehfvvYVBvtiSMKgN8bOVI0bQhnF5bU7vnHVIsH49Kva7i7GWaWYvmEzkYVk1TC+gZYBEog=="
-      },
-      "System.Text.Encodings.Web": {
-        "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "Vg8eB5Tawm1IFqj4TVK1czJX89rhFxJo9ELqc/Eiq0eXy13RK00eubyU6TJE6y+GQXjyV5gSfiewDUZjQgSE0w==",
-        "dependencies": {
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        }
       }
     }
   }
