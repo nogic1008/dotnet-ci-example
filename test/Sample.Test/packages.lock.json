@@ -52,12 +52,6 @@
           "Microsoft.Testing.Platform": "1.1.0"
         }
       },
-      "Microsoft.VisualStudio.TestPlatform.ObjectModel": {
-        "type": "Direct",
-        "requested": "[14.0.0, )",
-        "resolved": "14.0.0",
-        "contentHash": "PlQ38dL950pnyptA3CcnYIqAKpqlP7xpoz8n5ZfS1QgxFiZrh2x1lw05V3VNmq0ZZ9Xy3SHB5tOyvFjmjNR1HQ=="
-      },
       "MSTest.Analyzers": {
         "type": "Direct",
         "requested": "[3.3.1, )",
