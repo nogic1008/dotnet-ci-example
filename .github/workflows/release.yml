@@ -36,6 +36,7 @@ jobs:
         with:
           name: packages
           path: nupkgs/
+          include-hidden-files: true
 
   upload:
     name: Upload to GitHub Releases
