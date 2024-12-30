@@ -27,6 +27,28 @@ updates:
     labels:
       - 'dependabot:robot:'
     commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
+      prefix: ci(gh-actions)
+
+  # .NET SDK (/global.json)
+  - package-ecosystem: dotnet-sdk
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '08:00'
+      timezone: Japan
+    labels:
+      - 'dependabot:robot:'
+    commit-message:
+      prefix: build(dotnet-sdk)
+
+ # Dev container (/.devcontainer/devcontainer.json)
+  - package-ecosystem: devcontainers
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '08:00'
+      timezone: Japan
+    labels:
+      - 'dependabot:robot:'
+    commit-message:
+      prefix: ci(devcontainer)
