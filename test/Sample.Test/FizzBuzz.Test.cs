@@ -15,7 +15,7 @@ public sealed class FizzBuzzTest
     /// <inheritdoc cref="Enumerable.Where{TSource}(IEnumerable{TSource}, Func{TSource, bool})" path="/param[@name='predicate']"/>
     /// </param>
     private static int[] GenerateValues(Func<int, bool> predicate)
-    {
+    {   
         const int count = 10;
         int[] values = new int[count];
         for (int i = 0; i < values.Length; i++)
