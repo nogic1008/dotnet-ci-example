@@ -19,9 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v4.2.0
-      - name: Add Problem Matcher for dotnet-format
-        uses: xt0rted/dotnet-format-problem-matcher@v1.2.0
+        uses: nogic1008/setup-dotnet@93a95a226bf576aaee8f2fc99997923229e43f1b
       - name: Lint
         run: dotnet format --verify-no-changes --verbosity detailed
 
