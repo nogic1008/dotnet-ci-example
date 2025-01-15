@@ -40,36 +40,6 @@ jobs:
       - name: Restore with lock files
         run: dotnet restore --locked-mode
 
-  restore:
-    name: Update NuGet Lock Files
-    needs: validate
-    if: failure() && contains(github.head_ref, 'dependabot') && github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.2
-        with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4.2.0
-        with:
-          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
-          cache: true
-          cache-dependency-path: '**/packages.lock.json'
-
-      - name: Restore and Update Lock Files
-        run: dotnet restore --force-evaluate
-      - name: Run ECLint
-        run: npx eclint fix "**/packages.lock.json"
-
-      - name: Commit & Push
-        run: |
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git add .
-          git commit -m "chore(deps): update NuGet lock file"
-          git push
-
   test:
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}

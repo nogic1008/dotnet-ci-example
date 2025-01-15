@@ -20,6 +20,11 @@ trim_trailing_whitespace = false
 [*.{cmd,bat}]
 end_of_line = crlf
 
+# NuGet lock files
+[packages.lock.json]
+end_of_line = crlf
+insert_final_newline = false
+
 # .NET Source Files
 [*.{cs,csx,cake,vb}]
 indent_size = 4
