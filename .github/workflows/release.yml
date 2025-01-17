@@ -41,6 +41,8 @@ jobs:
   upload:
     name: Upload to GitHub Releases
     needs: [build]
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Assets
@@ -58,6 +60,8 @@ jobs:
   publish-gpr:
     name: Publish to GitHub Packages
     needs: [build]
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK # detected from global.json
