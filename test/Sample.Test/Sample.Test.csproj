@@ -12,9 +12,9 @@
 
   <ItemGroup>
     <AssemblyAttribute Include="Microsoft.VisualStudio.TestTools.UnitTesting.ParallelizeAttribute" />
-    <Using Include="FluentAssertions" />
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
     <Using Include="RandomFixtureKit" />
+    <Using Include="Shouldly" />
   </ItemGroup>
 
   <ItemGroup>
