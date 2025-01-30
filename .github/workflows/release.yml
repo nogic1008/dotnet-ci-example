@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4.2.0
+        uses: actions/setup-dotnet@v4.3.0
         with:
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v4.2.0
+        uses: actions/setup-dotnet@v4.3.0
 
       - name: Download Build Assets
         uses: actions/download-artifact@v4.1.8
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v4.2.0
+        uses: actions/setup-dotnet@v4.3.0
 
       - name: Download Build Assets
         uses: actions/download-artifact@v4.1.8
