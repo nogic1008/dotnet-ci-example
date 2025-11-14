@@ -11,7 +11,7 @@ public sealed class FizzBuzzTest
     /// <summary>
     /// When number is not divisible by 3 and 5, <see cref="FizzBuzz.ToFizzBuzzFormat"/> returns same value as <see cref="int.ToString()"/>.
     /// </summary>
-    [TestMethod($"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<not a multiple of 3 and 5>) > returns same value as int.{nameof(int.ToString)}()")]
+    [TestMethod(DisplayName = $"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<not a multiple of 3 and 5>) > returns same value as int.{nameof(int.ToString)}()")]
     [DataRow(1)]
     [DataRow(101)]
     [DataRow(-1)]
@@ -21,7 +21,7 @@ public sealed class FizzBuzzTest
     /// <summary>
     /// When number is divisible by 3, <see cref="FizzBuzz.ToFizzBuzzFormat"/> returns "Fizz".
     /// </summary>
-    [TestMethod($"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<multiple of 3>) > returns \"Fizz\"")]
+    [TestMethod(DisplayName = $"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<multiple of 3>) > returns \"Fizz\"")]
     [DataRow(3)]
     [DataRow(303)]
     [DataRow(-3)]
@@ -31,7 +31,7 @@ public sealed class FizzBuzzTest
     /// <summary>
     /// When number is divisible by 5, <see cref="FizzBuzz.ToFizzBuzzFormat"/> returns "Buzz".
     /// </summary>
-    [TestMethod($"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<multiple of 5>) > returns \"Buzz\"")]
+    [TestMethod(DisplayName = $"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<multiple of 5>) > returns \"Buzz\"")]
     [DataRow(5)]
     [DataRow(505)]
     [DataRow(-5)]
@@ -41,7 +41,7 @@ public sealed class FizzBuzzTest
     /// <summary>
     /// When number is divisible by 15, <see cref="FizzBuzz.ToFizzBuzzFormat"/> returns "Fizz Buzz".
     /// </summary>
-    [TestMethod($"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<multiple of 15>) > returns \"Fizz Buzz\"")]
+    [TestMethod(DisplayName = $"{nameof(FizzBuzz)} > {nameof(FizzBuzz.ToFizzBuzzFormat)}(<multiple of 15>) > returns \"Fizz Buzz\"")]
     [DataRow(15)]
     [DataRow(300)]
     [DataRow(-15)]
