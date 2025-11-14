@@ -100,28 +100,24 @@ jobs:
         run: dotnet restore --locked-mode
       - name: Generate version
         id: version
+        shell: pwsh
         run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            VERSION="${TAG_VERSION:1}"
-            ARTIFACT_NAME="packages"
-          else
-            SHORT_SHA=$(git rev-parse --short HEAD)
-            BASE_VERSION=$(grep -oP '<Version>\K[^<]+' Directory.Build.props)
-            VERSION="${BASE_VERSION}-nightly-${SHORT_SHA}"
-            ARTIFACT_NAME="nightly-packages"
-          fi
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "artifact-name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
-          echo "Generated version: ${VERSION}"
-        env:
-          TAG_VERSION: ${{ github.event.release.tag_name }}
+          if ("${{ github.event_name }}" -eq "release") {
+            $version = "${{ github.event.release.tag_name }}".Substring(1)
+          } else {
+            $shortSha = "${{ github.sha }}".Substring(0, 7)
+            $baseVersion = ([xml](Get-Content Directory.Build.props)).Project.PropertyGroup.Version
+            $version = "$baseVersion-nightly-$shortSha"
+          }
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Generated version: $version"
       - name: Pack
         run: dotnet pack --configuration Release --no-restore --output nupkgs -p:Version=${{ steps.version.outputs.version }}
 
       - name: Upload Build Assets
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: ${{ steps.version.outputs.artifact-name }}
+          name: packages
           path: nupkgs/
           include-hidden-files: true
 
@@ -141,8 +137,8 @@ jobs:
 
       - name: Download Build Assets
         uses: actions/download-artifact@v4.1.8
-        with: &download-artifact
-          name: ${{ github.event_name == 'release' && 'packages' || 'nightly-packages' }}
+        with:
+          name: packages
           path: nupkgs/
 
       - name: Upload to GitHub Releases
@@ -160,6 +156,7 @@ jobs:
           user: ${{ vars.NUGET_USER_NAME }}
 
       - name: Publish to ${{ github.event_name == 'release' && 'NuGet' || 'GitHub Packages' }}
-        run: dotnet nuget push "nupkgs/*.nupkg" --skip-duplicate --source ${SOURCE_URL} --api-key ${{ github.event_name == 'release' && steps.nuget-login.outputs.NUGET_API_KEY || secrets.GITHUB_TOKEN }}
+        run: dotnet nuget push "nupkgs/*.nupkg" --skip-duplicate --source ${SOURCE_URL} --api-key ${NUGET_API_KEY}
         env:
           SOURCE_URL: ${{ github.event_name == 'release' && 'https://api.nuget.org/v3/index.json' || format('https://nuget.pkg.github.com/{0}/index.json', github.repository_owner) }}
+          NUGET_API_KEY: ${{ github.event_name == 'release' && steps.nuget-login.outputs.NUGET_API_KEY || github.token }}
