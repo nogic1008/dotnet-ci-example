@@ -4,5 +4,7 @@
     "rollForward": "latestFeature",
     "allowPrerelease": false
   },
-  "test": "MSTest.Sdk"
+  "test": {
+    "runner": "Microsoft.Testing.Platform"
+  }
 }
