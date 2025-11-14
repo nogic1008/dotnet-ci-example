@@ -18,11 +18,11 @@ public class Counter
     /// Increments the counter by the specified amount.
     /// </summary>
     /// <param name="amount">Amount to increment.</param>
-    public void Increment(int amount = 1) => Count += amount;
+    public void Increment(int amount = 1) => this.Count += amount;
 
     /// <summary>
     /// Decrements the counter by the specified amount.
     /// </summary>
     /// <param name="amount">Amount to decrement.</param>
-    public void Decrement(int amount = 1) => Count -= amount;
+    public void Decrement(int amount = 1) => this.Count -= amount;
 }
