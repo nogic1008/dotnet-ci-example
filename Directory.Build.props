@@ -7,7 +7,7 @@
     <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.5.0</Version>
+    <VersionPrefix>0.5.0</VersionPrefix>
 
     <!-- Build Options -->
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
