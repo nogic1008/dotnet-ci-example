@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4.3.0
-        with: &dotnet-setup
+        with: &setup-dotnet-with
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
           cache-dependency-path: '**/packages.lock.json'
@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4.3.0
-        with: *dotnet-setup
+        with: *setup-dotnet-with
 
       - name: Restore
         run: dotnet restore
@@ -82,8 +82,8 @@ jobs:
           files: "./test/Sample.Test/bin/Debug/${{ matrix.framework }}/TestResults/cobertura.xml"
 
   pack:
-    name: Pack
-    if: github.event_name == 'push' || github.event_name == 'release'
+    name: Release Build & Pack
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     needs: [lint, validate, test]
     permissions:
@@ -94,14 +94,15 @@ jobs:
           fetch-depth: ${{ github.event_name == 'push' && 0 || 1 }}
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4.3.0
-        with: *dotnet-setup
+        with: *setup-dotnet-with
 
       - name: Restore
         run: dotnet restore --locked-mode
       - name: Pack
-        run: dotnet pack --configuration Release --no-restore --output nupkgs ${PACK_VERSION_ARG}
+        run: dotnet pack --configuration Release --no-restore --output nupkgs -p:${VERSION_ARG}
         env:
-          PACK_VERSION_ARG: ${{ github.event_name == 'release' && format('-p:Version={0}', substring(github.event.release.tag_name, 1)) || format('-p:VersionSuffix=nightly-{0}', substring(github.sha, 0, 7)) }}
+          # <VersionPrefix>-nightly-<SHA> on nightly build, <Git tag> on production build
+          VERSION_ARG: ${{ github.event_name == 'release' && format('Version={0}', substring(github.event.release.tag_name, 1)) || format('VersionSuffix=nightly-{0}', substring(github.sha, 0, 7)) }}
 
       - name: Upload Build Assets
         uses: actions/upload-artifact@v4.6.2
@@ -113,7 +114,7 @@ jobs:
   publish:
     name: Publish
     needs: [pack]
-    if: github.event_name == 'push' || github.event_name == 'release'
+    if: github.event_name != 'pull_request'
     environment: ${{ github.event_name == 'release' && 'production' || 'nightly' }}
     permissions:
       packages: write
