@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Sample.Core/Sample.Core.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Sample.Test/Sample.Test.csproj" />
+  </Folder>
+  <Folder Name="/_Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="coverlet.runsettings" />
+    <File Path="global.json" />
+  </Folder>
+</Solution>
