@@ -126,7 +126,7 @@ jobs:
         uses: actions/setup-dotnet@v4.3.0
 
       - name: Download Build Assets
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v6.0.0
         with:
           name: packages
           path: nupkgs/
