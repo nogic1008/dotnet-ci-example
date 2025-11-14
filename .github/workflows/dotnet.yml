@@ -60,6 +60,18 @@ jobs:
         include:
           - os: windows-latest
             framework: net48
+          - os: ubuntu-24.04-arm
+            framework: net9.0
+          - os: ubuntu-24.04-arm
+            framework: net8.0
+          - os: windows-11-arm
+            framework: net9.0
+          - os: windows-11-arm
+            framework: net8.0
+          - os: macos-13
+            framework: net9.0
+          - os: macos-13
+            framework: net8.0
     steps:
       - uses: actions/checkout@v5.0.0
       - name: Setup .NET SDK
