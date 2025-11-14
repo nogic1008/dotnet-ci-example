@@ -98,11 +98,22 @@ jobs:
 
       - name: Restore
         run: dotnet restore --locked-mode
+      - name: Set version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            # Remove 'v' prefix from tag name (e.g., v1.0.0 -> 1.0.0)
+            VERSION="${{ github.event.release.tag_name }}"
+            VERSION="${VERSION#v}"
+            echo "arg=Version=${VERSION}" >> $GITHUB_OUTPUT
+          else
+            # Use first 7 characters of SHA for nightly builds
+            SHA="${{ github.sha }}"
+            echo "arg=VersionSuffix=nightly-${SHA:0:7}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
       - name: Pack
-        run: dotnet pack --configuration Release --no-restore --output nupkgs -p:${VERSION_ARG}
-        env:
-          # <VersionPrefix>-nightly-<SHA> on nightly build, <Git tag> on production build
-          VERSION_ARG: ${{ github.event_name == 'release' && format('Version={0}', substring(github.event.release.tag_name, 1)) || format('VersionSuffix=nightly-{0}', substring(github.sha, 0, 7)) }}
+        run: dotnet pack --configuration Release --no-restore --output nupkgs -p:${{ steps.version.outputs.arg }}
 
       - name: Upload Build Assets
         uses: actions/upload-artifact@v4.6.2
