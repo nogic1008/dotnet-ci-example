@@ -62,7 +62,7 @@ For automatic NuGet publishing on release:
 
 ### Prerequisites
 
-- **.NET SDK**: Version **9.0.200** or compatible (specified in `global.json`)
+- **.NET SDK**: Version **10.0.100** or compatible (specified in `global.json`)
   - The SDK will automatically roll forward to newer feature versions
   - Download from [dotnet.microsoft.com](https://dotnet.microsoft.com/download)
 
@@ -87,6 +87,7 @@ dotnet test
 
 This repository includes a Dev Container configuration (`.devcontainer/`) with all required tools:
 
+- .NET 10.0 SDK
 - .NET 9.0 SDK
 - .NET 8.0 SDK
 - Mono (for .NET Framework support)
@@ -150,7 +151,7 @@ dotnet build --no-restore
 dotnet test
 
 # Run tests for specific framework
-dotnet test --framework net9.0
+dotnet test --framework net10.0
 
 # Lint code style
 dotnet format --verify-no-changes
@@ -199,6 +200,7 @@ This template includes a comprehensive GitHub Actions workflow (`.github/workflo
   - Windows (x64 and ARM)
   - macOS (Intel and Apple Silicon)
 - Tests multiple target frameworks:
+  - .NET 10.0
   - .NET 9.0
   - .NET 8.0
   - .NET Framework 4.8 (Windows only)
@@ -297,25 +299,15 @@ Contributions are welcome! Here's how to contribute:
 
 ## Package README
 
-This template includes automatic README generation for published NuGet packages. To customize the README shown on NuGet.org:
+This template includes a package README (`src/Sample.Core/README.md`) that is automatically included in published NuGet packages. The README provides usage examples and documentation for package consumers.
 
-1. Create a `README.md` file in your library project directory (e.g., `src/YourLibrary/README.md`)
+To customize for your library:
 
-2. Add the following to your library's `.csproj`:
+1. Edit `src/YourLibrary/README.md` with your library's documentation
+2. The `.csproj` is already configured to include the README in the package
+3. The README will be automatically displayed on NuGet.org when you publish
 
-```xml
-<PropertyGroup>
-  <PackageReadmeFile>README.md</PackageReadmeFile>
-</PropertyGroup>
-
-<ItemGroup>
-  <None Include="README.md" Pack="true" PackagePath="\" />
-</ItemGroup>
-```
-
-3. The README will be automatically included in your NuGet package and displayed on NuGet.org
-
-See [Microsoft's documentation](https://learn.microsoft.com/nuget/nuget-org/package-readme-on-nuget-org) for more information.
+See [Microsoft's documentation](https://learn.microsoft.com/nuget/nuget-org/package-readme-on-nuget-org) for more information about package READMEs.
 
 ## License
 
