@@ -4,7 +4,5 @@
     "rollForward": "latestFeature",
     "allowPrerelease": false
   },
-  "msbuild-sdks": {
-    "MSTest.Sdk": "4.0.0"
-  }
+  "test": "MSTest.Sdk"
 }
