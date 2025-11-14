@@ -19,6 +19,8 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK # detected from global.json
@@ -31,6 +33,8 @@ jobs:
   validate:
     name: Validate NuGet Lock Files
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK
@@ -46,6 +50,8 @@ jobs:
   test:
     name: Debug Build & Test
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -142,6 +148,8 @@ jobs:
     name: Pack for Release
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Setup .NET SDK
