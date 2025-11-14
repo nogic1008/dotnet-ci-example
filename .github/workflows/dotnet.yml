@@ -99,7 +99,9 @@ jobs:
       - name: Restore
         run: dotnet restore --locked-mode
       - name: Pack
-        run: dotnet pack --configuration Release --no-restore --output nupkgs ${{ github.event_name == 'release' && format('-p:Version={0}', substring(github.event.release.tag_name, 1)) || format('-p:VersionSuffix=nightly-{0}', substring(github.sha, 0, 7)) }}
+        run: dotnet pack --configuration Release --no-restore --output nupkgs ${PACK_VERSION_ARG}
+        env:
+          PACK_VERSION_ARG: ${{ github.event_name == 'release' && format('-p:Version={0}', substring(github.event.release.tag_name, 1)) || format('-p:VersionSuffix=nightly-{0}', substring(github.sha, 0, 7)) }}
 
       - name: Upload Build Assets
         uses: actions/upload-artifact@v4.6.2
