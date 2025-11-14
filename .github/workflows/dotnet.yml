@@ -1,10 +1,13 @@
-name: .NET CI
+name: .NET
 
 on:
   push:
     branches:
       - main
   pull_request:
+  release:
+    types:
+      - published
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -75,7 +78,7 @@ jobs:
           disable_search: true
           files: "./test/Sample.Test/bin/Debug/${{ matrix.framework }}/TestResults/cobertura.xml"
 
-  pack:
+  pack-nightly:
     name: Pack for GitHub Packages
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -114,7 +117,7 @@ jobs:
 
   publish-gpr:
     name: Publish to GitHub Packages
-    needs: [pack]
+    needs: [pack-nightly]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment: nightly
     permissions:
@@ -134,3 +137,77 @@ jobs:
         run: dotnet nuget push "nupkgs/*.nupkg" --skip-duplicate --source ${GPR_URL} --api-key ${{ secrets.GITHUB_TOKEN }}
         env:
           GPR_URL: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+
+  pack-release:
+    name: Pack for Release
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4.3.0
+        with:
+          dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+
+      - name: Restore
+        run: dotnet restore --locked-mode
+      - name: Release Build & Pack
+        run: dotnet pack --configuration Release --no-restore --output nupkgs -p:Version=${TAG_VERSION:1}
+        env:
+          TAG_VERSION: ${{ github.event.release.tag_name }} # v0.0.0-abc
+
+      - name: Upload Build Assets
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: packages
+          path: nupkgs/
+          include-hidden-files: true
+
+  upload-release:
+    name: Upload to GitHub Releases
+    needs: [pack-release]
+    if: github.event_name == 'release'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Assets
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: packages
+          path: nupkgs/
+
+      - name: Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: nupkgs/*.nupkg
+
+  publish-nuget:
+    name: Publish to NuGet
+    needs: [pack-release]
+    if: github.event_name == 'release'
+    environment: production
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Setup .NET SDK # detected from global.json
+        uses: actions/setup-dotnet@v4.3.0
+
+      - name: Download Build Assets
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: packages
+          path: nupkgs/
+
+      - name: NuGet login (OIDC)
+        uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ vars.NUGET_USER_NAME }}
+
+      - name: Publish to NuGet
+        run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
