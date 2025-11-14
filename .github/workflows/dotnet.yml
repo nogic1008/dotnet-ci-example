@@ -100,6 +100,7 @@ jobs:
         run: dotnet restore --locked-mode
       - name: Set version
         id: version
+        shell: bash
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
             # Remove 'v' prefix from tag name (e.g., v1.0.0 -> 1.0.0)
@@ -111,8 +112,7 @@ jobs:
             SHA="${{ github.sha }}"
             echo "arg=VersionSuffix=nightly-${SHA:0:7}" >> $GITHUB_OUTPUT
           fi
-        shell: bash
-      - name: Pack
+      - name: Build & Pack
         run: dotnet pack --configuration Release --no-restore --output nupkgs -p:${{ steps.version.outputs.arg }}
 
       - name: Upload Build Assets
