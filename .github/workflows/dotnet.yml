@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.0
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.0.1
       - name: Add Problem Matcher for dotnet-format
         run: echo "::add-matcher::.github/dotnet-format.json"
       - name: Lint
@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.0
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.0.1
         with: &setup-dotnet-with
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
@@ -63,7 +63,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.0
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.0.1
         with: *setup-dotnet-with
 
       - name: Restore
@@ -93,7 +93,7 @@ jobs:
         with:
           fetch-depth: ${{ github.event_name == 'push' && 0 || 1 }}
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.0.1
         with: *setup-dotnet-with
 
       - name: Restore
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.0.1
 
       - name: Download Build Assets
         uses: actions/download-artifact@v6.0.0
