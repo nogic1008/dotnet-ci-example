@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
       - name: Setup .NET SDK # detected from global.json
         uses: actions/setup-dotnet@v5.0.1
       - name: Add Problem Matcher for dotnet-format
@@ -36,7 +36,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5.0.1
         with: &setup-dotnet-with
@@ -61,7 +61,7 @@ jobs:
           - os: windows-latest
             framework: net48
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5.0.1
         with: *setup-dotnet-with
@@ -89,7 +89,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
         with:
           fetch-depth: ${{ github.event_name == 'push' && 0 || 1 }}
       - name: Setup .NET SDK
