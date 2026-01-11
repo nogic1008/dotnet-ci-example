@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.3.2" />
     <!-- Test Dependencies -->
     <PackageVersion Include="Shouldly" Version="4.3.0" />
   </ItemGroup>

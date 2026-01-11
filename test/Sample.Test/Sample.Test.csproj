@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <ProjectReference Include="../../src/Sample.Core/Sample.Core.csproj" />
   </ItemGroup>
 
