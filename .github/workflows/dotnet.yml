@@ -22,9 +22,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.2
       - name: Setup .NET SDK # detected from global.json
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.1.0
       - name: Add Problem Matcher for dotnet-format
         run: echo "::add-matcher::.github/dotnet-format.json"
       - name: Lint
@@ -36,9 +36,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.2
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.1.0
         with: &setup-dotnet-with
           dotnet-version: ${{ vars.DOTNET_SDK_VERSIONS }}
           cache: true
@@ -61,9 +61,9 @@ jobs:
           - os: windows-latest
             framework: net48
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.2
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.1.0
         with: *setup-dotnet-with
 
       - name: Restore
@@ -74,7 +74,7 @@ jobs:
         run: dotnet test --framework ${{ matrix.framework }} --no-build -- --coverage --coverage-output-format cobertura --coverage-output cobertura.xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5.5.1
+        uses: codecov/codecov-action@v5.5.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: ${{ runner.os }},${{ matrix.framework }}
@@ -89,11 +89,11 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: ${{ github.event_name == 'push' && 0 || 1 }}
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.1.0
         with: *setup-dotnet-with
 
       - name: Restore
@@ -116,7 +116,7 @@ jobs:
         run: dotnet pack --configuration Release --no-restore --output nupkgs -p:${{ steps.version.outputs.arg }}
 
       - name: Upload Build Assets
-        uses: actions/upload-artifact@v5.0.0
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: packages
           path: nupkgs/
@@ -134,10 +134,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5.0.0
+        uses: actions/setup-dotnet@v5.1.0
 
       - name: Download Build Assets
-        uses: actions/download-artifact@v6.0.0
+        uses: actions/download-artifact@v7.0.0
         with:
           name: packages
           path: nupkgs/
