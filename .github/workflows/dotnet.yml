@@ -116,7 +116,7 @@ jobs:
         run: dotnet pack --configuration Release --no-restore --output nupkgs -p:${{ steps.version.outputs.arg }}
 
       - name: Upload Build Assets
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: packages
           path: nupkgs/
