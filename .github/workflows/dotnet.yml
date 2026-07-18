@@ -25,8 +25,7 @@ jobs:
       - uses: actions/checkout@v7.0.0
       - name: Setup .NET SDK # detected from global.json
         uses: actions/setup-dotnet@v6.0.0
-      - name: Add Problem Matcher for dotnet-format
-        run: echo "::add-matcher::.github/dotnet-format.json"
+
       - name: Lint
         run: dotnet format --verify-no-changes --verbosity detailed
 
