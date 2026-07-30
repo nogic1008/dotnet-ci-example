@@ -7,6 +7,11 @@
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <Description>Example of .NET Core + Github Actions</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
